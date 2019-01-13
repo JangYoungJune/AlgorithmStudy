@@ -1,6 +1,9 @@
 package fromProgrammers;
 
 import java.util.HashMap;
+/*
+ * Problem URL: https://programmers.co.kr/learn/courses/30/lessons/42576
+ */
 
 public class Hash1 {
 	public static String solution(String[] participant, String[] completion) {
