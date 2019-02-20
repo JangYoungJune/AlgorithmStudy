@@ -1,8 +1,6 @@
 package fromProgrammers;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /* project URL: https://programmers.co.kr/learn/courses/30/lessons/42583
@@ -11,35 +9,40 @@ import java.util.Queue;
 public class StackQueue3 {
 	public static int solution(int bridge_length, int weight, int[] truck_weights) {
 		int answer = 0;
-		int truckOrder = 0;
-		Queue<Integer> bridgeState = new LinkedList<>();
-		List<Integer> timer = new ArrayList<>();
+		Queue<Integer> waitTruck = new LinkedList<>();
+		Queue<Integer> runTruckPosition = new LinkedList<>();
+		Queue<Integer> lengthState = new LinkedList<>();
+		
+		for(int value : truck_weights) {
+			waitTruck.add(value);
+		}
+		
 		do {
 			answer++;
-			for(int i=0;i<timer.size();i++) {
-				timer.set(i, timer.get(i)+1);
+			// car pass by road
+			while(!lengthState.isEmpty() && lengthState.peek() >= bridge_length) {
+				runTruckPosition.poll();
+				lengthState.poll();
 			}
-			if(!timer.isEmpty() && timer.get(0)==bridge_length) {
-				bridgeState.poll();
-				timer.remove(0);
+			// car enter the road
+			int road_weight = runTruckPosition.stream().mapToInt(i->i.intValue()).sum();
+			if(!waitTruck.isEmpty() && (road_weight+ waitTruck.peek() <= weight)) {
+				runTruckPosition.add(waitTruck.poll());
+				lengthState.add(0);
 			}
-			int sumOfBridge = bridgeState.stream().reduce(0, (a,b)->a+b).intValue();
-			if(truckOrder < truck_weights.length) {
-				if(sumOfBridge + truck_weights[truckOrder] <= weight && bridge_length > bridgeState.size()) {
-					bridgeState.offer(truck_weights[truckOrder]);
-					timer.add(1);
-					truckOrder++;
-				}
+			// run truck's position add 1
+			for(int i=0;i<lengthState.size();i++) {
+				lengthState.add(lengthState.poll()+1);
 			}
-		}while(bridgeState.size()!=0);
+		}while(waitTruck.size()!=0 || runTruckPosition.size()!=0);
 		
-		return answer+1;
+		return answer;
 	}
 	
 	public static void main(String args[]) {
-		int a = 2;
-		int b = 10;
-		int[] c = {7,4,5,6};
+		int a = 100;
+		int b = 100;
+		int[] c = {10,10,10,10,10,10,10,10,10,10};
 		
 		
 		int answer = solution(a, b, c);
