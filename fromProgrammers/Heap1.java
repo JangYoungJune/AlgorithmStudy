@@ -1,7 +1,9 @@
 package fromProgrammers;
 
 import java.util.Arrays;
-
+/*
+ * problem URL: https://programmers.co.kr/learn/courses/30/lessons/42626
+ * */
 public class Heap1 {
 
 	static class HeapClass{
@@ -68,25 +70,21 @@ public class Heap1 {
 	}
 
 	public static int solution(int[] scoville, int k) {
-		// while문은 제일 위의 값이 k값보다 클경우 / 또는 값이 1개밖에없을경우
-		// 처음 상태를 힙소팅(소팅은 무조건 오름차순으로)
-		// 상단 값을 뺀다.
-		// 힙소팅한다.
-		// 상단값을 뺀다.
-		// 힙소팅한다.
-		// 새 값을 추가한다.
-		// 힙소팅한다.
-		// 전체 사이클값을 1 올린다.
-
+		// while loop - min heap's value is bigger then k / only 1 left scoville
+		// in heapclass -> initialize array by ascend order
+		// pop 2 values(by heapsort)
+		// add 1 new scoville value(by heapsort)
+		// 1 add to cycle(answer)
+		// before return value, check exception situation(min value lack the limitaion(K))
 		int answer = 0;
 		HeapClass heapArr = new HeapClass(scoville);
-		while(heapArr.getMin() < k || heapArr.getSize() > 1){
+		while(heapArr.getMin() < k && heapArr.getSize() > 1){
 			int lowestScoville = heapArr.heapPop();
 			int secondLowScoville = heapArr.heapPop();
 			heapArr.heapPush(lowestScoville + (secondLowScoville *2));
 			answer++;
 		}
-		return answer;
+		return (heapArr.getMin()<k)? -1 : answer;
 	}
 
 	public static void main(String args[]) {
