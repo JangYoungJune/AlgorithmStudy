@@ -3,12 +3,15 @@ package fromProgrammers;
 public class Dynamic6 {
     public static int solution(int[] money){
         /*
-        * 고민해봐야 하는것
-        * 1. 맨 처음의 시작 - 처음에 참 > 마지막 안된다 / 처음에 거짓 > 마지막 될 수 있다.
+         * Problem URL:https://programmers.co.kr/learn/courses/30/lessons/42897
+         * Ref: https://blog.leejseo.com/45
+         * i,j에서 i: 도시 거친 갯수 / j: 시간으로 DP programming
+         * 고민해봐야 하는것
+         * 1. 맨 처음의 시작 - 처음에 참 > 마지막 안된다 / 처음에 거짓 > 마지막 될 수 있다.
          * 2. 한칸 넘기 VS 두칸 넘기
          * 2-1. 현재 값 + i-2(현재값 채택 + 한칸 넘기)
          * 2-2. i-1(두칸넘기 / 채택 후 다음값)
-        */
+         * */
         int size = money.length;
         int lastPosition = size-1;
         int[] moneyArr1 = new int[size];
