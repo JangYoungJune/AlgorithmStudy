@@ -1,4 +1,4 @@
-package AlgorithmStudy.SWExpertAcademy;
+package SWExpertAcademy;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -6,8 +6,8 @@ import java.util.Scanner;
 public class SW1204 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int cycle_num = sc.nextInt();
-        for (int cycle = 0; cycle < cycle_num; cycle++) {
+        int tc_num = sc.nextInt();
+        for (int tc = 1; tc <= tc_num; tc++) {
             int test_num = sc.nextInt();
 
             int[] arr = new int[101];
@@ -15,13 +15,13 @@ public class SW1204 {
                 arr[sc.nextInt()]++;
             }
 
-            int max = Arrays.stream(arr).max().getAsInt();
-            for (int i = 100; i >= 0; i--) {
-                if (arr[i] == max) {
-                    System.out.println("#" + test_num + " " + i);
-                    break;
+            int max = 0;
+            for (int i = 0; i <= 100; i++) {
+                if(arr[i]>=arr[max]) {
+                	max = i;
                 }
             }
+            System.out.printf("#%d %d\n",tc, max);
         }
     }
 }
