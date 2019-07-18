@@ -1,4 +1,4 @@
-package SWExpertAcademy;
+package fromSWExpertAcademy;
 
 import java.util.Arrays;
 import java.util.Scanner;
