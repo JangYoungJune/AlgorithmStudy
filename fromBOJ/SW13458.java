@@ -7,7 +7,7 @@ public class SW13458 {
     static int N;
     static int[] arr;
     static int mainRef, subRef;
-    static int answer;
+    static long answer;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
