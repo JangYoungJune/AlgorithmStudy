@@ -1,4 +1,4 @@
-package AlgorithmStudy.SWExpertAcademy;
+package fromSWExpertAcademy;
 
 import java.util.Scanner;
 
@@ -22,5 +22,6 @@ public class SW1206 {
 
             System.out.println("#" + (cycle + 1) + " " + answer);
         }
+        sc.close();
     }
 }

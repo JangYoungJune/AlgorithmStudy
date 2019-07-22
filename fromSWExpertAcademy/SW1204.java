@@ -1,6 +1,5 @@
-package SWExpertAcademy;
+package fromSWExpertAcademy;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class SW1204 {
@@ -23,5 +22,6 @@ public class SW1204 {
             }
             System.out.printf("#%d %d\n",tc, max);
         }
+        sc.close();
     }
 }
