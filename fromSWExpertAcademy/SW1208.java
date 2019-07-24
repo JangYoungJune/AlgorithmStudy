@@ -31,7 +31,9 @@ public class SW1208 {
 				// 마지막 값이 가장 낮게 유지해야 한다 - 마지막쪽에 같은 값이 있을경우 제일 안쪽부터 채워나간다.
 				int max_outer = numList.lastIndexOf(numList.get(0));
 				int min_inner = numList.indexOf(numList.get(99));
-				
+				if(numList.get(0)==numList.get(99)) {
+					break;
+				}
 				numList.set(max_outer, numList.get(max_outer)-1);
 				numList.set(min_inner, numList.get(min_inner)+1);
 				
