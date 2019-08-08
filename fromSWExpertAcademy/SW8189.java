@@ -26,8 +26,8 @@ public class SW8189 {
 			for(int i=0;i<N;i++) {
 				letterTime[i] = Integer.parseInt(st.nextToken());
  			}
-			int index = 1;
-			int cnt = 1;
+			int index = 0;
+			int cnt = 0;
 			int preIndex = 0;
 			
 			while(preIndex<N) {

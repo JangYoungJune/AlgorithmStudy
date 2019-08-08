@@ -12,39 +12,30 @@ public class SW7730 {
 			String[] str = br.readLine().trim().split(" ");
 			int N = Integer.parseInt(str[0]);
 			int M = Integer.parseInt(str[1]);
-			int[] arr = Arrays.stream(br.readLine().trim().split(" ")).mapToInt(i -> Integer.parseInt(i)).sorted()
-					.toArray();
+			int[] arr = Arrays.stream(br.readLine().trim().split(" ")).mapToInt(i -> Integer.parseInt(i)).sorted().toArray();
 			long sumAll = 0l;
 			for (int val : arr) {
 				sumAll += val;
 			}
 
-			int idx = 0;
-			int min = 0;
+			int idx = -1;
+			int pre = 0;
 			while (sumAll > M) {
 				idx++;
-				sumAll -= ((arr[idx] - min) * (N - idx));
-				min = arr[idx];
-				while (min == arr[idx + 1]) {
+				sumAll -= ((long)(arr[idx] - pre) * (long)(N - idx));
+				pre = arr[idx];
+				while (idx+1<N && pre == arr[idx + 1]) {
 					idx++;
 				}
 			}
-
-//                   while(sumAll<M) {
-//                         arr[]
-//                   }
-
-			for (int i = arr[idx]; i >= 0; i--) {
-				sumAll += (N - idx);
-				if (sumAll > M) {
-					min = i - 1;
-					break;
-				}
+			while(idx-1>=0 && pre == arr[idx-1]){
+				idx--;
 			}
-			System.out.println("#" + tc + " " + min);
+			while(sumAll<M){
+				sumAll += (long)(N - idx);
+				pre--;
+			}
+			System.out.println("#" + tc + " " + pre);
 		}
 	}
 }
-//   min arr[idx]
-// 13 13 15 15 15 3 > 13 1 1 2
-// 6  12*5
