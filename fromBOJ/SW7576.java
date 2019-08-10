@@ -1,11 +1,11 @@
-package fromProgrammers;
+package fromBOJ;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-public class Boj_Main_7576 {
+public class SW7576 {
 	static class Location{
 		int x; 
 		int y;
