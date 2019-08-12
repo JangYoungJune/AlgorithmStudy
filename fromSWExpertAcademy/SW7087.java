@@ -15,7 +15,7 @@ public class SW7087 {
 				String temp = br.readLine();
 				arr[temp.charAt(0) - 'A'] = true;
 			}
-			for (boolean temp : ) {
+			for (int i=0;i<arr.length;i++) {
 				if (!arr[i]) {
 					break;
 				}
