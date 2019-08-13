@@ -6,9 +6,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class SW10026 {
-	static char[][] arr;
-	static boolean[][] boolArr;
-	static Queue<Pos> queue;
 	static class Pos{
 		int x;
 		int y;
@@ -17,6 +14,12 @@ public class SW10026 {
 			this.y = y;
 		}
 	}
+	
+	static char[][] arr;
+	static boolean[][] checkArr;
+	static Queue<Pos> queue;
+	static int N;
+	
 	public static boolean isSameColor(boolean isNormal, int x, int y, char color){
 		if(isNormal){
 			return arr[x][y]==color;
@@ -28,83 +31,71 @@ public class SW10026 {
 			}
 		}
 	}
+	
+	public static void bfs(char color, boolean isNormal) {
+		while(!queue.isEmpty()) {
+			Pos pos = queue.poll();
+			int x = pos.x;
+			int y = pos.y;
+			if(y-1>=0 && !checkArr[x][y-1] && isSameColor(isNormal, x, y-1, color)) {
+				checkArr[x][y-1] = true;
+				queue.offer(new Pos(x, y-1));
+			}
+			if(y+1<N && !checkArr[x][y+1] && isSameColor(isNormal, x, y+1, color)) {
+				checkArr[x][y+1] = true;
+				queue.offer(new Pos(x, y+1));
+			}
+			if(x+1<N && !checkArr[x+1][y] && isSameColor(isNormal, x+1, y, color)) {
+				checkArr[x+1][y] = true;
+				queue.offer(new Pos(x+1, y));
+			}
+			if(x-1>=0 && !checkArr[x-1][y] && isSameColor(isNormal, x-1, y, color)) {
+				checkArr[x-1][y] = true;
+				queue.offer(new Pos(x-1, y));
+			}
+		}
+	}
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine().trim());
+		N = Integer.parseInt(br.readLine().trim());
 		arr = new char[N][N];
-		boolArr = new boolean[N][N];
-
+		checkArr = new boolean[N][N];
+		queue = new LinkedList<>();
+		
+		int answer = 0;
+		int abAnswer = 0;
+		// read data from input
 		for (int i = 0; i < N; i++) {
 			char[] str = br.readLine().trim().toCharArray();
 			for (int j = 0; j < N; j++) {
 				arr[i][j] = str[j];
 			}
 		}
-
-		queue = new LinkedList<>();
-		int answer = 0;
-		int abAnswer = 0;
-		char findColor;
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				if(boolArr[i][j]){
+		
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				if(checkArr[i][j]) {
 					continue;
-				} else{
-					findColor = arr[i][j];
-					queue.add(new Pos(i, j));
-					boolArr[i][j] = true;
-					while(!queue.isEmpty()){
-						Pos now = queue.poll();
-						if(now.x+1<N && !boolArr[now.x+1][now.y] && isSameColor(true, now.x+1, now.y, findColor)){
-							queue.add(new Pos(now.x+1,now.y));
-							boolArr[now.x+1][now.y] = true;
-						}
-						if(now.y+1<N && !boolArr[now.x][now.y+1] && isSameColor(true, now.x, now.y+1, findColor)){
-							queue.add(new Pos(now.x,now.y+1));
-							boolArr[now.x][now.y+1] = true;
-						}
-						if(now.y-1>=0 && !boolArr[now.x][now.y-1] && isSameColor(true, now.x, now.y-1, findColor)){
-							queue.add(new Pos(now.x,now.y-1));
-							boolArr[now.x][now.y-1] = true;
-						}
-					}
-					answer++;
 				}
+				checkArr[i][j] = true;
+				queue.add(new Pos(i, j));
+				bfs(arr[i][j], true);
+				answer++;
 			}
 		}
-
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				boolArr[i][j] = false;
-			}
-		}
-
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N;j++){
-				if(boolArr[i][j]){
+		
+		checkArr = new boolean[N][N];
+		
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				if(checkArr[i][j]) {
 					continue;
-				} else{
-					findColor = arr[i][j];
-					queue.add(new Pos(i, j));
-					boolArr[i][j]=true;
-					while(!queue.isEmpty()){
-						Pos now = queue.poll();
-						if(now.x+1<N && !boolArr[now.x+1][now.y] && isSameColor(false, now.x+1, now.y, findColor)){
-							queue.add(new Pos(now.x+1,now.y));
-							boolArr[now.x+1][now.y] = true;
-						}
-						if(now.y+1<N && !boolArr[now.x][now.y+1] && isSameColor(false, now.x, now.y+1, findColor)){
-							queue.add(new Pos(now.x,now.y+1));
-							boolArr[now.x][now.y+1] = true;
-						}
-						if(now.y-1>=0 && !boolArr[now.x][now.y-1] && isSameColor(false, now.x, now.y-1, findColor)){
-							queue.add(new Pos(now.x,now.y-1));
-							boolArr[now.x][now.y-1] = true;
-						}
-					}
-					abAnswer++;
 				}
+				checkArr[i][j] = true;
+				queue.add(new Pos(i, j));
+				bfs(arr[i][j], false);
+				abAnswer++;
 			}
 		}
 
