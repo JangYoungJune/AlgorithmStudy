@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Solution_1240_SW문제해결응용1일차_단순2진암호코드_장영준 {
+public class SW1240 {
 	static String[] decode = {
 			"0001101",
 			"0011001",
@@ -55,10 +55,11 @@ public class Solution_1240_SW문제해결응용1일차_단순2진암호코드_�
 				if(passIdx==8) {
 					int correct = 0;
 					int result = 0;
+					
 					for(int j=0;j<8;j++) {
 						result += password[j];
 					}
-					correct = ((password[0]+password[2]+password[4]+password[6])*password[5])+(password[1] +password[3] +password[7]);
+					correct = ((password[7]+password[5]+password[3]+password[1])*3)+(password[0] + password[2] +password[4] +password[6]);
 					if(correct%10==0) {
 						answer = result;
 					}
