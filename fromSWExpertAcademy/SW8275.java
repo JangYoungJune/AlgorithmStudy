@@ -26,7 +26,7 @@ public class SW8275 {
 			
 			cage = new int[N+1];
 			answerCage = new int[N+1];
-			for(int i=0;i<=cage.length;i++) {
+			for(int i=1;i<cage.length;i++) {
 				cage[i] = -1;
 			}
 			maxX = -1;
@@ -43,17 +43,26 @@ public class SW8275 {
 				hamster[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			splitX(0, startCage[0], endCage[0]);
-			
+			splitX(0, startCage[0], endCage[0], hamster[0]);
+			System.out.print("#"+tc);
+			if(!satisfy){
+				System.out.print(" -1");
+			} else{
+				for(int i=1;i<=N;i++){
+					System.out.print(" "+answerCage[i]);
+				}
+			}
+			System.out.println();
 		}
 	}
-	public static void splitX(int order, int now, int end) {
+	public static void splitX(int order, int now, int end, int size) {
 		if(order==M) {
 			satisfy = true;
 			int nowMax = 0;
 			for(int i=1;i<=N;i++) {
 				if(cage[i]==-1) {
 					nowMax += X;
+					cage[i] = X;
 				}else {
 					nowMax += cage[i];
 				}
@@ -66,26 +75,50 @@ public class SW8275 {
 			} else if(nowMax==maxX) {
 				for(int i=1;i<=N;i++) {
 					if(cage[i]<answerCage[i]) {
-						
+						for(int j=1;j<=N;j++) {
+							answerCage[j] = cage[j];
+						}
+						break;
+					} else if(cage[i]==answerCage[i]){
+						continue;
+					} else{
+						break;
 					}
 				}
-				
 			}
 		} else {
 			if(now>end) { // 다음값으로 처리
-				splitX(order+1, startCage[order+1], endCage[order+1]);
+				if(order+1==M){
+					splitX(order+1, startCage[order], endCage[order], hamster[order]);
+				}else{
+					splitX(order+1, startCage[order+1], endCage[order+1], hamster[order+1]);
+				}
 			} else {
-				splitX(order, now+1, end);
+				if(end==now){
+					if(size>X || (cage[now]!=-1 && cage[now]!=size)){
+						return;
+					}
+					int temp = cage[now];
+					cage[now] = size;
+					splitX(order, now+1, end, size - cage[now]);
+					cage[now] = temp;
+				}else{
+					if(cage[now]!=-1){
+						if(size<cage[now]){
+							return;
+						}
+						splitX(order, now+1, end, size - cage[now]);
+					}else{
+						int possibleLoop = (size>=X)? X : size;
+						for(int i=0;i<=possibleLoop;i++){
+							int temp = cage[now];
+							cage[now] = i;
+							splitX(order, now+1, end, size - i);
+							cage[now] = temp;
+						}
+					}
+				}
 			}
 		}
 	}
 }
-
-/**
-3 5
-1 3 8
-0 3 5
-5 1 2
-5 0 3
- */
-
