@@ -21,7 +21,6 @@ public class SW17143 {
 			this.z = z;
 		}
 	}
-	static List<Shark> sharkList;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine().trim());
@@ -29,42 +28,45 @@ public class SW17143 {
 		int C = Integer.parseInt(st.nextToken());
 		int sharkCnt = Integer.parseInt(st.nextToken());
 		int[][] arr = new int[R][C];
-		sharkList = new ArrayList<>();
+		List<Shark> sharkList = new ArrayList<>();
 		for(int i=0;i<sharkCnt;i++) {
 			st = new StringTokenizer(br.readLine().trim());
-			int inputR = Integer.parseInt(st.nextToken())-1;
-			int inputC = Integer.parseInt(st.nextToken())-1;
-			int inputS = Integer.parseInt(st.nextToken()); // 속도
-			int inputD = Integer.parseInt(st.nextToken()); // 방향
-			int inputZ = Integer.parseInt(st.nextToken()); // 무게
+			int inputR = Integer.parseInt(st.nextToken()) - 1;
+			int inputC = Integer.parseInt(st.nextToken()) - 1;
+			int inputS = Integer.parseInt(st.nextToken());
+			int inputD = Integer.parseInt(st.nextToken());
+			int inputZ = Integer.parseInt(st.nextToken());
 			sharkList.add(new Shark(inputR,inputC,inputS,inputD,inputZ));
 			arr[inputR][inputC]++;
 		}
-		// 사람 움직이면서 상어 잡기
+		
 		int answer = 0;
-		for(int c=0;c<C;c++) {
+		for(int cycle=0;cycle<C;cycle++) {
+			// 현재 위치 상어 잡기
 			int lowR = -1;
 			for(int r=0;r<R;r++) {
-				if(arr[r][c]==1) {
+				if(arr[r][cycle]==1) {
 					lowR = r;
 					break;
 				}
 			}
 			if(lowR!=-1) {
-				for(int i=0;i<sharkList.size();i++) {
-					if(sharkList.get(i).r==lowR && sharkList.get(i).c==c) {
-						arr[lowR][c]--;
+				int size = sharkList.size();
+				for(int i=size-1;i>=0;i--) {
+					if(sharkList.get(i).r==lowR && sharkList.get(i).c==cycle) {
+						arr[lowR][cycle]--;
 						answer += sharkList.remove(i).z;
 						break;
 					}
 				}
 			}
+			// 상어 이동하기
 			for(int i=0;i<sharkList.size();i++) {
 				Shark shark = sharkList.get(i);
 				arr[shark.r][shark.c]--;
 				int speed = shark.s;
-				if(shark.d==1 || shark.d==2) { // 상하
-					speed = speed % (R*2-2);
+				if(shark.d==1 || shark.d==2) {
+					speed = speed % ((R-1)*2);
 					while(speed!=0) {
 						if(shark.d==1 && shark.r==0) {
 							shark.d=2;
@@ -80,7 +82,7 @@ public class SW17143 {
 						speed--;
 					}
 				} else {
-					speed = speed % (C*2-2);
+					speed = speed % ((C-1)*2);
 					while(speed!=0) {
 						if(shark.d==4 && shark.c==0) {
 							shark.d=3;
@@ -98,39 +100,43 @@ public class SW17143 {
 				}
 				arr[shark.r][shark.c]++;
 			}
+			// 겹치는 상어 정리
 			for(int i=0;i<R;i++) {
 				for(int j=0;j<C;j++) {
-					if(arr[i][j]>1) {
-						int cnt = arr[i][j];
-						int maxWeight = -1;
-						int maxIdx = -1;
-						for(int idx=sharkList.size()-1;idx>=0;idx--) {
-							if(sharkList.get(idx).r==i && sharkList.get(idx).c==j) {
-								if(maxIdx==-1) {
-									maxIdx = i;
-									maxWeight = sharkList.get(i).z;
-									cnt--;
+					if(arr[i][j]<=1) {
+						continue;
+					}
+					int cnt = arr[i][j];
+					int maxWeight = -1;
+					int maxIdx = -1;
+					int size = sharkList.size();
+					
+					for(int idx=size-1;idx>=0;idx--) {
+						if(sharkList.get(idx).r==i && sharkList.get(idx).c==j) {
+							if(maxIdx==-1) {
+								maxIdx = idx;
+								maxWeight = sharkList.get(idx).z;
+								cnt--;
+							} else {
+								if(maxWeight>sharkList.get(idx).z) {
+									sharkList.remove(idx);
+									maxIdx--;
 								} else {
-									if(maxWeight>sharkList.get(i).z) {
-										sharkList.remove(i);
-									} else {
-										sharkList.remove(maxIdx);
-										maxIdx = i;
-										maxWeight = sharkList.get(i).z;
-									}
-									cnt--;
+									sharkList.remove(maxIdx);
+									maxIdx = idx;
+									maxWeight = sharkList.get(idx).z;
 								}
-								
-								if(cnt==0) {
-									break;
-								}
+								cnt--;
+							}
+							
+							if(cnt==0) {
+								break;
 							}
 						}
-						arr[i][j]=1;
 					}
+					arr[i][j]=1;
 				}
 			}
-			
 		}
 		System.out.println(answer);
 	}
