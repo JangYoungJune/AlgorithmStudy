@@ -14,11 +14,13 @@ public class SW17140 {
 		Comparator<int[]> myComparator = new Comparator<int[]>() {
 			@Override
 			public int compare(int[] o1, int[] o2) {
-				if(o1[1]==0 || o1[0]==0) {
+				if(o1[1]==0 && o2[1]==0) {
+					return 0;
+				} else if(o1[1]==0) {
 					return 1;
-				} else if(o2[1]==0 || o2[0]==0) {
+				} else if(o2[1]==0) {
 					return -1;
-				} else if(o1[1]!=o2[1]) {
+				}else if(o1[1]!=o2[1]) {
 					return Integer.valueOf(o1[1]).compareTo(o2[1]);
 				} else {
 					return Integer.valueOf(o1[0]).compareTo(o2[0]);
@@ -27,7 +29,7 @@ public class SW17140 {
 		};
 		st = new StringTokenizer(br.readLine().trim()," ");
 		int[][] map = new int[100][100];
-		int[][] sortValue = new int[101][2];
+		int[][] sortValue = new int[100][2];
 		int r = Integer.parseInt(st.nextToken())-1;
 		int c = Integer.parseInt(st.nextToken())-1;
 		int k = Integer.parseInt(st.nextToken());
@@ -52,11 +54,14 @@ public class SW17140 {
 				int rangeC = 0;
 				for(int i=0;i<maxR;i++) {
 					for(int idx=0;idx<sortValue.length;idx++) {
-						sortValue[idx][0] = idx;
+						sortValue[idx][0] = idx+1;
 						sortValue[idx][1] = 0;
 					}
 					for(int j=0;j<maxC;j++) {
-						sortValue[map[i][j]][1]++;
+						if(map[i][j]==0) {
+							continue;
+						}
+						sortValue[map[i][j]-1][1]++;
 					}
 					Arrays.sort(sortValue, myComparator);
 					
@@ -77,11 +82,14 @@ public class SW17140 {
 				int rangeR = 0;
 				for(int j=0;j<maxC;j++) {
 					for(int idx=0;idx<sortValue.length;idx++) {
-						sortValue[idx][0] = idx;
+						sortValue[idx][0] = idx+1;
 						sortValue[idx][1] = 0;
 					}
 					for(int i=0;i<maxR;i++) {
-						sortValue[map[i][j]][1]++;
+						if(map[i][j]==0) {
+							continue;
+						}
+						sortValue[map[i][j]-1][1]++;
 					}
 					Arrays.sort(sortValue, myComparator);
 					
@@ -99,13 +107,13 @@ public class SW17140 {
 				}
 				maxR = rangeR;
 			}
-			if(answer>=100) {
+			if(answer>100) {
 				break;
 			}
 			answer++;
 		}
 		
-		if(answer>=100) {
+		if(answer>100) {
 			answer = -1;
 		}
 		System.out.println(answer);
